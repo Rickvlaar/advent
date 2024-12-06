@@ -30,6 +30,6 @@ def prepare_python_file(year: int, day: int):
 
 if __name__ == '__main__':
     year_number = 2024
-    day_number = 2
+    day_number = 3
     get_input_and_write_to_file(year_number, day_number)
     prepare_python_file(year_number, day_number)
