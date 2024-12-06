@@ -7,12 +7,10 @@ day_file = parse_file_as_list('input/3.txt')
 
 @time_function()
 def run_a(file: list[str]):
-    # fixme: there seem to be line endings within the real day input string
+    # There are line endings within the real day input string, so make it a single line
+    single_string_memory = ''.join(file)
     matcher = re.compile(pattern='mul\\((\\d*),(\\d*)\\)')
-    total = 0
-    for line in file:
-        for multiply_command_match in matcher.finditer(line):
-            total += int(multiply_command_match.group(1)) * int(multiply_command_match.group(2))
+    total = sum([int(multiply_command_match.group(1)) * int(multiply_command_match.group(2)) for multiply_command_match in matcher.finditer(single_string_memory)])
     return total
 
 
