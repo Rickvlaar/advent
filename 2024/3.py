@@ -16,12 +16,33 @@ def run_a(file: list[str]):
 
 @time_function()
 def run_b(file: list[str]):
-    pass
+    single_string_memory = ''.join(file)
+    multiply_command_matcher = re.compile(pattern='mul\\((\\d*),(\\d*)\\)')
+    enablement_command_matcher = re.compile(pattern='(do\\(\\))|(don\'t\\(\\))')
+
+    enablement_pos_dict = {}
+    for enablement_command in enablement_command_matcher.finditer(single_string_memory):
+        enablement_pos_dict[enablement_command.end()] = True if enablement_command[0] == 'do()' else False
+
+    enablement_command_posses = sorted(enablement_pos_dict, reverse=True)
+    enable_multiplication = True
+    total = 0
+    for multiply_command in multiply_command_matcher.finditer(single_string_memory):
+        start_index = multiply_command.start()
+        for pos in enablement_command_posses:
+            if pos <= start_index:
+                enable_multiplication = enablement_pos_dict[pos]
+                break
+
+        if enable_multiplication:
+            total += int(multiply_command.group(1)) * int(multiply_command.group(2))
+
+    return total
 
 
 if __name__ == '__main__':
     answer_a = run_a(day_file)
-    answer_b = run_b(test_file)
+    answer_b = run_b(day_file)
 
     console.print(f'solution A: {answer_a}')
     console.print(f'solution B: {answer_b}')
